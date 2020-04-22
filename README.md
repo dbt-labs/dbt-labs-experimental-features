@@ -5,6 +5,15 @@ yet supported natively in dbt-core.
 
 ### Materialized views
 
+This package adds support for `materialized_view` as a dbt materialization. It takes an
+approach similar to that of the existing `incremental` materialization:
+- In a "full refresh" run, drop and recreate the MV from scratch.
+- Otherwise, "refresh" the MV as appropriate. Depending on the database, that could be DML (`refresh`) or noop.
+
+At any point, if the database object corresponding to a MV model exists instead as a table
+or standard view, dbt will attempt to drop it and recreate the model from scratch as a 
+materialized view.
+
 #### Current issues: general
 
 - dbt only allows 'materializedview' as a `RelationType`. (See [here](https://github.com/fishtown-analytics/dbt/blob/dev/octavius-catto/core/dbt/adapters/base/relation.py#L24)). But when we try to use
@@ -13,7 +22,7 @@ not `drop materializedview ...` or `alter materializedview ... rename`.
 
 #### Postgres
 
-- supported configs: none
+- Supported model configs: none
 - [docs](https://www.postgresql.org/docs/9.3/rules-materializedviews.html)
 
 ##### Current issues
@@ -23,8 +32,9 @@ the cache and check `pg_matviews` from within the materialization.
 
 #### Redshift
 
-- supported configs: `sort`, `dist`
+- Supported model configs: `sort`, `dist`
 - [docs](https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-overview.html)
+- Anecdotally, `refresh materialized view ...` is _very_ slow to run
 
 ##### Current issues
 - Materialized views _are_ included in `pg_views` and `information_schema.views`. I haven't yet found a clear way to infer from system tables
@@ -40,7 +50,7 @@ Database Error in model test_mv (models/test_mv.sql)
 
 #### BigQuery
 
-- supported configs: `enable_refresh`, `refresh_interval_minutes`
+- Supported model configs: `enable_refresh`, `refresh_interval_minutes`
 - [docs](https://cloud.google.com/bigquery/docs/materialized-views-intro)
 - Although BQ does not have `drop ... cascade`, if the base table of a materialized is dropped
 and recreated, the MV also needs to be dropped and recreated
