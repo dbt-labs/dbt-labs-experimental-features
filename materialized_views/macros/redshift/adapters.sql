@@ -29,10 +29,9 @@
 
         {% set find_matview %}
         
-            select count(*) from pg_views
-            where schemaname = 'dbt_jcohen'
-            and viewname = 'test_mv'
-            and definition ilike '%create materialized view%'
+            select count(*) from stv_mv_info
+            where schema = 'dbt_jcohen'
+            and name = 'test_mv'
         
         {% endset %}
         

@@ -19,12 +19,6 @@ At any point, if the database object corresponding to a MV model exists instead 
 or standard view, dbt will attempt to drop it and recreate the model from scratch as a 
 materialized view.
 
-#### Current issues: general
-
-- dbt only allows 'materializedview' as a `RelationType`. (See [here](https://github.com/fishtown-analytics/dbt/blob/dev/octavius-catto/core/dbt/adapters/base/relation.py#L24)). But when we try to use
-`adapter.rename` or `adapter.drop`, the database is expecting `drop materialized view ...` or `alter materialized view ... rename`,
-not `drop materializedview ...` or `alter materializedview ... rename`.
-
 #### Postgres
 
 - Supported model configs: none
@@ -34,6 +28,9 @@ not `drop materializedview ...` or `alter materializedview ... rename`.
 - Materialized views are registered in `pg_matviews`. Because dbt's current caching
 only checks `pg_tables` and `pg_views` for existing relations, the current approach is to work around
 the cache and check `pg_matviews` from within the materialization.
+- dbt only allows 'materializedview' as a `RelationType`. (See [here](https://github.com/fishtown-analytics/dbt/blob/dev/octavius-catto/core/dbt/adapters/base/relation.py#L24)). When we try to use
+`adapter.rename` or `adapter.drop`, the database is expecting `drop materialized view ...` or `alter materialized view ... rename`,
+not `drop materializedview ...` or `alter materializedview ... rename`.
 
 #### Redshift
 
@@ -42,10 +39,8 @@ the cache and check `pg_matviews` from within the materialization.
 - Anecdotally, `refresh materialized view ...` is _very_ slow to run
 
 ##### Current issues
-- Materialized views _are_ included in `pg_views` and `information_schema.views`. I haven't yet found a clear way to infer from system tables
-or the information schema whether something is a view or a materialized view. For now, I am hacking this by seeing if the view
-`definition` is `ilike '%create materialized view%'`.
-- If the base table is cascade dropped, the materialized view seems to stick around in the cache...
+- MVs do not support late binding. If the base table is cascade dropped, the materialized view seems to stick around in the cache. We need
+some way to "hard refresh" the cache or check the database after running parents.
 - If the column is renamed or removed + readded (e.g. varchar widening), the materialized view cannot be refreshed.
 ```
 Database Error in model test_mv (models/test_mv.sql)
