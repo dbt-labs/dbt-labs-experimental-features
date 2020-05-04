@@ -3,6 +3,11 @@
 This package will add dbt support for database features which are not
 yet supported natively in dbt-core.
 
+### BigQuery Incremental Strategies
+
+* These features shipped in dbt v0.16.0! See [changelog](https://github.com/fishtown-analytics/dbt/blob/dev/octavius-catto/CHANGELOG.md#features-4) and [docs](https://docs.getdbt.com/docs/building-a-dbt-project/building-models/bigquery-configs/#merge-behavior-incremental-models)
+* The [project here](bq_incrementals) provided the substrate for a [discourse post](https://discourse.getdbt.com/t/981) benchmarking different incremental strategies on BigQuery
+
 ### Materialized views
 
 This package adds support for `materialized_view` as a dbt materialization. It takes an
