@@ -62,10 +62,18 @@ Database Error in model test_mv (models/test_mv.sql)
 
 - Supported model configs: `enable_refresh`, `refresh_interval_minutes`
 - [docs](https://cloud.google.com/bigquery/docs/materialized-views-intro)
-- Although BQ does not have `drop ... cascade`, if the base table of a materialized is dropped
+- Although BQ does not have `drop ... cascade`, if the base table of a MV is dropped
 and recreated, the MV also needs to be dropped and recreated
 ```
 Materialized view dbt-dev-168022:dbt_jcohen.test_mv references table dbt-dev-168022:dbt_jcohen.base_tbl which was deleted and recreated. The view must be deleted and recreated as well.
+```
+
+#### Snowflake
+
+- Although Snowflake does not have `drop ... cascade`, if the base table table of a MV is dropped
+and recreated, the MV also needs to be dropped and recreated, otherwise the following error will appear:
+```
+Failure during expansion of view 'TEST_MV': SQL compilation error: Materialized View TEST_MV is invalid.
 ```
 
 #### Snowflake
