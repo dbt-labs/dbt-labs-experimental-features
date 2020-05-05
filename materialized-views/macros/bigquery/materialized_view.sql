@@ -24,9 +24,13 @@
       {% set build_sql = dbt_labs_experimental_features.refresh_materialized_view(target_relation, config) %}
   {% endif %}
 
-  {% call statement("main") %}
-      {{ build_sql }}
-  {% endcall %}
+  {% if build_sql %}
+      {% call statement("main") %}
+          {{ build_sql }}
+      {% endcall %}
+  {% else %}
+    {{ store_result('main', status='SKIP') }}
+  {% endif %}
 
   {{ run_hooks(post_hooks) }}
 
