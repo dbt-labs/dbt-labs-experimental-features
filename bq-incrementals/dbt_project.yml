@@ -1,0 +1,23 @@
+
+name: 'bq_incremental_testing'
+version: '0.1.0'
+
+profile: 'garage-bigquery'
+
+source-paths: ["models"]
+analysis-paths: ["analysis"] 
+test-paths: ["tests"]
+data-paths: ["data"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+
+require-dbt-version: ">=0.16.0"
+
+models:
+  vars:
+    old: 7
+    new: 1
