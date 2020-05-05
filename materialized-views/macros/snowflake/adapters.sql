@@ -8,12 +8,12 @@
 
     {%- if cluster_by_keys is not none and cluster_by_keys is string -%}
         {%- set cluster_by_keys = [cluster_by_keys] -%}
-      {%- endif -%}
-      {%- if cluster_by_keys is not none -%}
+    {%- endif -%}
+    {%- if cluster_by_keys is not none -%}
         {%- set cluster_by_string = cluster_by_keys|join(", ")-%}
-      {% else %}
+    {% else %}
         {%- set cluster_by_string = none -%}
-      {%- endif -%}
+    {%- endif -%}
 
     {{ sql_header if sql_header is not none }}
 
