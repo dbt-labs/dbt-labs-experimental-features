@@ -70,16 +70,14 @@ Materialized view dbt-dev-168022:dbt_jcohen.test_mv references table dbt-dev-168
 
 #### Snowflake
 
+- Supported model configs: `secure`, `cluster_by`, `automatic_clustering`, `persist_docs` (relation only)
+- [docs](https://docs.snowflake.com/en/user-guide/views-materialized.html)
+- Note: Snowflake MVs are only enabled on enterprise accounts
 - Although Snowflake does not have `drop ... cascade`, if the base table table of a MV is dropped
 and recreated, the MV also needs to be dropped and recreated, otherwise the following error will appear:
 ```
 Failure during expansion of view 'TEST_MV': SQL compilation error: Materialized View TEST_MV is invalid.
 ```
-
-#### Snowflake
-
-- support TK
-- [docs](https://docs.snowflake.com/en/user-guide/views-materialized.html) (note: you must have enterprise edition)
 
 
 ### Resources:
