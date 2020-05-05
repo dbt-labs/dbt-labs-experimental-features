@@ -10,7 +10,7 @@ own project, clone the repo and install it [locally](https://docs.getdbt.com/doc
 
 ```
 packages:
-  - local: /Users/you/development/dbt-labs/dbt-labs-experimental-features/materialized-views
+  - local: /Users/you/dbt-labs-experimental-features/materialized-views
 ```
 
 ## BigQuery Incremental Strategies
