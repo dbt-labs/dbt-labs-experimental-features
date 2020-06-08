@@ -32,17 +32,20 @@
     
     {%- set is_auto_refresh = config.get('enable_refresh', true) %}
     
-    {%- if not is_auto_refresh -%} {# manual refresh #}
+    {%- if is_auto_refresh == false -%} {# manual refresh #}
     
-        call bq.refresh_materialized_view('{{relation|replace('`','')}}')
+        {% set refresh_command %}
+        call bq.refresh_materialized_view('{{relation|replace("`","")}}')
+        {% endset %}
+        
+        {%- do return(refresh_command) -%}
     
     {%- else -%} {# automatic refresh #}
     
         {%- do log("Skipping materialized view " ~ relation ~ " because it is set
             to refresh automatically") -%}
-    
-        -- noop
-        select 1 as fun
+            
+        {%- do return(none) -%}
     
     {%- endif -%}
 
