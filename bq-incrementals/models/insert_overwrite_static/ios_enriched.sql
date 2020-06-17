@@ -3,7 +3,7 @@
     unique_key = 'id',
     partition_by = {'field': 'date_hour', 'data_type': 'timestamp'},
     incremental_strategy = 'insert_overwrite',
-    partitions = ['2020-03-08', '2020-03-09', '2020-03-10']
+    partitions = get_last_3d()
 )}}
 
 with page_views as (
