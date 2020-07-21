@@ -4,14 +4,28 @@
 
 with historical as (
     
-    select * from {{ historical_relation }}
+    select *,
+        'historical' as _dbt_lambda_view_source,
+        '{{ run_started_at}}' as _dbt_last_run_at
+    
+    from {{ historical_relation }}
+    
+),
+
+new_raw as (
+    
+    {{ model_sql }}
     
 ),
 
 new as (
     
-    {{ model_sql }}
-    
+    select *,
+        'new' as _dbt_lambda_view_source,
+        '{{ run_started_at}}' as _dbt_last_run_at
+        
+    from new_raw
+        
 ),
 
 unioned as (
