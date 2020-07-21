@@ -1,16 +1,20 @@
 {{
     config(
-        materialized='incremental',
-        unique_key = 'page_view_id'
+        materialized = 'lambda_view',
+        unique_key = 'page_view_id',
+        historical_config = {
+            'materialized': 'incremental',
+            'schema': 'lambda_historical',
+            'alias': 'page_views'
+        }
     )
 }}
 
 with events as (
 
     select * from {{ source('snowplow','event') }}
-    {% if is_incremental() %}
-    where collector_tstamp >= (select max(max_collector_tstamp) from {{ this }})
-    {% endif %}
+    
+    {{ lambda_filter('collector_tstamp') }}
 
 ),
 
@@ -23,7 +27,7 @@ page_views as (
         page_url,
         count(*) * 10 as approx_time_on_page,
         min(derived_tstamp) as page_view_start,
-        max(collector_tstamp) as max_collector_tstamp
+        max(collector_tstamp) as collector_tstamp
 
     from events,
     lateral flatten (input => parse_json(contexts):data) web_page_context

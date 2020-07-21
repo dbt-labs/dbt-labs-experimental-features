@@ -1,5 +1,8 @@
-name: 'dbt_labs_experimental_features'
+name: 'lambda_view_approaches'
 version: '0.1.0'
+config-version: 2
+
+profile: 'jaffle_shop'
 
 source-paths: ["models"]
 analysis-paths: ["analysis"]
@@ -12,3 +15,8 @@ target-path: "target"
 clean-targets:
     - "target"
     - "dbt_modules"
+
+models:
+  lambda_view_approaches:
+    thought_experiment_only:
+      +enabled: false
