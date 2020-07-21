@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='view'
+        materialized='view',
+        post_hook="{{ make_lamda_view(this, run_started_at) }}"
     )
 }}
 

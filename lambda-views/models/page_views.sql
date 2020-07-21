@@ -7,7 +7,7 @@
 with current_view as (
 
     select * from {{ ref('page_views_current') }}
-    where max_collector_tstamp >= dateadd('hour', -2, current_timestamp())
+    where max_collector_tstamp >= dateadd('hour', -2, '{{ run_started_at }}')
 
 ),
 
@@ -15,7 +15,7 @@ historical_table as (
 
     select * from {{ ref('page_views_historical') }}
 
-    where max_collector_tstamp < dateadd('hour', -2, current_timestamp())
+    where max_collector_tstamp < dateadd('hour', -2, '{{ run_started_at }}')
 
 ),
 
