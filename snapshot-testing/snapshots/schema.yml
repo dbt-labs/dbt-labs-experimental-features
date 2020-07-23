@@ -1,0 +1,8 @@
+version: 2
+
+snapshots:
+  - name: historic_revenue_snapshot
+    columns:
+      - name: dbt_valid_to
+        tests:
+          - is_null
