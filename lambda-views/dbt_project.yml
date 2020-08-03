@@ -12,3 +12,8 @@ target-path: "target"
 clean-targets:
     - "target"
     - "dbt_modules"
+
+models:
+  lambda_views:
+    option_1:
+      enabled: true
