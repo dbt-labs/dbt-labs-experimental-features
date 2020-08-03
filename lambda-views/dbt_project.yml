@@ -19,3 +19,5 @@ models:
       enabled: false
     option_2:
       enabled: true
+    thought_experiment:
+      enabled: false

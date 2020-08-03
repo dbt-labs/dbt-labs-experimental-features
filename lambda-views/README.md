@@ -41,3 +41,23 @@ Pros:
 
 Cons:
 - Harder to reason about — the model code lives separately to the models
+
+
+## Thought experiment
+Use a custom materialization
+
+**Note: This doesn't actually work**
+## Alt-alt approach: custom materialization??
+
+I've included a mockup in `models/thought_experiment_only`. As the name suggests, this is only a thought experiment.
+
+**Pros:**
+* We can  _both_ keep model SQL within the model file _and_ write that SQL only once
+
+**Cons:**
+* It obfuscates a _lot_ of logic into the materialization layer
+
+**Challenges:**
+* How to pass `config` values down to the historical model? Namely `materialization` (table or incremental), `schema`, `alias`
+* How to "call" one materialization from another? We don't want to copy+paste all the logic from every adapter's `incremental` materialization into a new `lambda_view` materialization
+* Will dbt break in new and interesting ways if it creates multiple objects in a database for one model?
