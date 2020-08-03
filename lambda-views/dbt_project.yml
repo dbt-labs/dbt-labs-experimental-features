@@ -16,4 +16,6 @@ clean-targets:
 models:
   lambda_views:
     option_1:
+      enabled: false
+    option_2:
       enabled: true
