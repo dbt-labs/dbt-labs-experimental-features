@@ -1,44 +1,11 @@
 {{
     config(
-        materialized='view'
+        materialized = 'view',
+        unique_key = 'page_view_id'
     )
 }}
 
-with historical as (
-
-    select
-        *,
-        'historical' as _dbt_lambda_view_source,
-        '{{ run_started_at }}' as _dbt_last_run_at
-
-    from {{ ref('page_views__lambda_historical') }}
-
-    where collector_tstamp < '{{ run_started_at }}'
-
-),
-
-new as (
-
-    select
-        *,
-        'new' as _dbt_lambda_view_source,
-        '{{ run_started_at }}' as _dbt_last_run_at
-
-    from {{ ref('page_views__lambda_current') }}
-
-    where collector_tstamp >= '{{ run_started_at }}'
-
-),
-
-
-unioned as (
-
-    select * from current_view
-
-    union all
-
-    select * from historical_table
-
-)
-
-select * from unioned
+{{ lambda_union(
+    historical_relation = ref(this.name ~ '__lambda_historical'),
+    model_sql = page_views_model_sql()
+) }}

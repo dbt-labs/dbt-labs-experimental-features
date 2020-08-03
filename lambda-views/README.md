@@ -16,3 +16,28 @@ Pros:
 Cons:
 - SQL is re-used — two models have the transformation SQL (e.g. `page_views_current` and `page_views_historical`), and the SQL in the models that union together the two relations are very similar
 - Very brittle — have to remember to materialize each model appropriately
+
+## Option 2
+Use macros to reduce duplicated code:
+- Use a macro, `<model_name>_sql.sql` for the transformation SQL
+- Use macros, `lambda_filter` and `lambda_union` to template the `where` clauses and the `union` model
+
+![Option 2 DAG](etc/option-2-dag.png)
+
+Things to note:
+- Removed the `__lambda_current` views, since you don't strictly need to materialize those in your warehouse
+- Optional var, `lambda_split`, that can be overridden for the cutoff time
+- Added logic for a unique key (though that may have performance impacts)
+- The `lambda_filter` macro relies on the model having a matching column in both the source and target table:
+```sql
+where {{ column_name }} >= (select max({{ column_name }}) from {{ this }})
+    and {{ column_name }} < '{{ filter_time }}'
+```
+
+Pros:
+- Less duplicated code
+- Less chance of silly mistakes
+- Fewer objects materialized in the warehouse
+
+Cons:
+- Harder to reason about — the model code lives separately to the models
