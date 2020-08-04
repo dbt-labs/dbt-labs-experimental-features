@@ -26,7 +26,7 @@ approach similar to that of the existing `incremental` materialization:
 - Otherwise, "refresh" the MV as appropriate. Depending on the database, that could be DML (`refresh`) or noop.
 
 At any point, if the database object corresponding to a MV model exists instead as a table
-or standard view, dbt will attempt to drop it and recreate the model from scratch as a 
+or standard view, dbt will attempt to drop it and recreate the model from scratch as a
 materialized view.
 
 #### Postgres
@@ -79,6 +79,11 @@ and recreated, the MV also needs to be dropped and recreated, otherwise the foll
 Failure during expansion of view 'TEST_MV': SQL compilation error: Materialized View TEST_MV is invalid.
 ```
 
+## Lambda views
+This lab demonstrates a number of options for lambda views, as discussed in this [discourse article](https://discourse.getdbt.com/t/how-to-create-near-real-time-models-with-just-dbt-sql/1457/3). Additional details about the various approaches can be found in at [lambda-views/README.md](lambda-views/README.md).
+
+## Snapshot testing
+This lab demonstrates how to use snapshots to detect dbt model regressions, as discussed in this [discourse article](https://discourse.getdbt.com/t/build-snapshot-based-tests-to-detect-regressions-in-historic-data/1478). Additional details on how to test this code for yourself can be found at [snapshot-testing/README.md](snapshot-testing/README.md).
 
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
