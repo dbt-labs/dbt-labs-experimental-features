@@ -1,0 +1,23 @@
+name: 'lambda_views'
+version: '0.1.0'
+
+source-paths: ["models"]
+analysis-paths: ["analysis"]
+test-paths: ["tests"]
+data-paths: ["data"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+
+models:
+  lambda_views:
+    option_1:
+      enabled: false
+    option_2:
+      enabled: true
+    thought_experiment:
+      enabled: false
