@@ -2,11 +2,11 @@
     {#
     -- This is what we will need the macro to say, but for now we want to use a "masking" policy which helps us debug
     case
-        when current_user() in ('claire') then {{ column_name }}
+        when current_user in ('claire') then {{ column_name }}
         else md5({{ column_name }})
     end
     #}
-    current_user() || '-' || {{ column_name }}
+    current_user || '-' || {{ column_name }}
 {% endmacro %}
 
 
@@ -21,15 +21,11 @@ create view {{ schema }}.{{ this.identifier }} as (
 
     select
         {% for col in model_cols %}
-            {{ log(col.name, info=True) }}
-            {{ col.name }}
-            {# -- commenting out while we figure out the rest
             {% if col.name in columns_to_mask %}
-            {{ mask_column(col.name) }}
+            {{ mask_column(col.name) }} as {{ col.name }}
             {% else %}
             {{ col.name }}
             {% endif %}
-            #}
             {{ "," if not loop.last }}
         {% endfor %}
     from {{ this }}
