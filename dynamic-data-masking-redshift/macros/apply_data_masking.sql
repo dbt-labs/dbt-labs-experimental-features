@@ -9,8 +9,10 @@
     {# current_user || '-' || {{ column_name }} #}
 {% endmacro %}
 
-{% macro create_data_masked_view(schema, columns_to_mask) %}
 
+
+{% macro create_data_masked_view(schema, columns_to_mask) %}
+{% if execute %}
 -- what are the columns in our model?
 {% set model_cols = adapter.get_columns_in_relation(this) %}
 
@@ -40,5 +42,7 @@ create view {{ schema }}.{{ this.identifier }} as (
 
 {% endset %}
 {% do run_query(view_sql) %}
+{{ dbt_utils.log_info("Masked view created at: " ~  schema ~ "." ~ this.identifier  ) }}
+{% endif %}
 select 1=1
 {% endmacro %}
