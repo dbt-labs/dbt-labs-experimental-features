@@ -1,21 +1,28 @@
 {% macro mask_column(column_name) %}
-    {#
+    
     -- This is what we will need the macro to say, but for now we want to use a "masking" policy which helps us debug
     case
         when current_user in ('claire') then {{ column_name }}
         else md5({{ column_name }})
     end
-    #}
-    current_user || '-' || {{ column_name }}
+   
+    {# current_user || '-' || {{ column_name }} #}
 {% endmacro %}
-
 
 {% macro create_data_masked_view(schema, columns_to_mask) %}
 
 -- what are the columns in our model?
 {% set model_cols = adapter.get_columns_in_relation(this) %}
 
--- create schema if not exists {{ schema }};
+{% set schema_sql %}
+
+create schema if not exists {{ schema }};
+
+{% endset %}
+
+{% do run_query(schema_sql) %}
+
+{% set view_sql %}
 
 create view {{ schema }}.{{ this.identifier }} as (
 
@@ -31,4 +38,7 @@ create view {{ schema }}.{{ this.identifier }} as (
     from {{ this }}
 )
 
+{% endset %}
+{% do run_query(view_sql) %}
+select 1=1
 {% endmacro %}
