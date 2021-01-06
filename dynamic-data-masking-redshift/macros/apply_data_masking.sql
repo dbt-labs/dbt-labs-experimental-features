@@ -1,24 +1,31 @@
 {% macro mask_column(column_name) %}
-    
-    -- This is what we will need the macro to say, but for now we want to use a "masking" policy which helps us debug
+    -- logic that controls the masking
     case
         when current_user in ('claire') then {{ column_name }}
         else md5({{ column_name }})
-    end
+    end as 
 {% endmacro %}
 
 {% macro create_data_masked_view(schema, columns_to_mask) %}
     {% if execute %}
+    
     {# get all columns in the relation #}
+    
         {% set model_cols = adapter.get_columns_in_relation(this) %}
+        
         {# create Relation object for masked view #}
+        
         {%- set masked_view = api.Relation.create(
               database=this.database,
               schema=schema,
               identifier=this.identifier) -%}
-        {# create schema if it doesn't exist #}
+              
+        {# create schema #}
+        
         {% do adapter.create_schema(masked_view) %}
-        {# create masked view for sensitive columns #}
+        
+        {# create masked view in new schema for sensitive columns #}
+        
         {% set view_sql %}
 
             create view {{ masked_view }} as (
