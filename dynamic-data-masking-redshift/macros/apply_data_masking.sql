@@ -16,17 +16,17 @@
 -- what are the columns in our model?
 {% set model_cols = adapter.get_columns_in_relation(this) %}
 
-{% set schema_sql %}
+{%- set masked_view = api.Relation.create(
+      database=this.database,
+      schema=schema,
+      identifier=this.identifier) -%}
 
-create schema if not exists {{ schema }};
+{% do adapter.create_schema(masked_view) %}
 
-{% endset %}
-
-{% do run_query(schema_sql) %}
 
 {% set view_sql %}
 
-create view {{ schema }}.{{ this.identifier }} as (
+create view {{ masked_view }} as (
 
     select
         {% for col in model_cols %}
@@ -42,7 +42,7 @@ create view {{ schema }}.{{ this.identifier }} as (
 
 {% endset %}
 {% do run_query(view_sql) %}
-{{ dbt_utils.log_info("Masked view created at: " ~  schema ~ "." ~ this.identifier  ) }}
+{{ dbt_utils.log_info("Masked view created at: " ~  masked_view ) }}
 {% endif %}
 select 1=1
 {% endmacro %}
