@@ -3,7 +3,7 @@
     case
         when current_user in ('claire') then {{ column_name }}
         else md5({{ column_name }})
-    end as 
+    end
 {% endmacro %}
 
 {% macro create_data_masked_view(schema, columns_to_mask) %}

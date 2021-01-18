@@ -1,9 +1,9 @@
 {{
     config(
-        post_hook=after_commit("{{ create_data_masked_view(
+        post_hook="{{ create_data_masked_view(
             schema='public_analytics',
             columns_to_mask=['first_name', 'last_name']
-        ) }}")
+        ) }}"
     )
 }}
 
