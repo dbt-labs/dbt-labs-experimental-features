@@ -2,7 +2,7 @@ name: 'bagel_shop'
 version: '0.1.0'
 
 config-version: 2
-profile: jaffle_shop
+profile: bagel_shop
 
 source-paths: ["models"]
 analysis-paths: ["analysis"]
