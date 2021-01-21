@@ -28,7 +28,9 @@
         
         {% set view_sql %}
 
-            create or replace view {{ masked_view }} as (
+            drop view if exists {{ masked_view }};
+
+            create view {{ masked_view }} as (
 
                 select
                     {% for col in model_cols %}
