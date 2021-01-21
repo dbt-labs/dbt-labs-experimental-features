@@ -1,8 +1,7 @@
 {{
     config(
         post_hook="{{ create_data_masked_view(
-            schema='public_analytics',
-            columns_to_mask=['first_name', 'last_name']
+            schema='public_analytics'
         ) }}"
     )
 }}

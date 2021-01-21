@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: employees_with_masking
+    columns:
+      - name: first_name
+        meta:
+          is_pii: true
+
+      - name: last_name
+        meta:
+          is_pii: true
+          
+      - name: favorite_bagel_flavor
+        description: "this is not PII"

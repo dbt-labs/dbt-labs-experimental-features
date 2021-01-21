@@ -6,7 +6,19 @@
     end
 {% endmacro %}
 
-{% macro create_data_masked_view(schema, columns_to_mask) %}
+{% macro create_data_masked_view(schema) %}
+
+
+{% set columns_to_mask = [] %}
+
+{% for column_name, column_properties in model.get('columns').items() %}
+
+    {% if column_properties.get('meta').get('is_pii') %}
+        {% do columns_to_mask.append(column_name) %}
+    {% endif %}
+
+{% endfor %}
+
     {% if execute %}
     
     {# get all columns in the relation #}
