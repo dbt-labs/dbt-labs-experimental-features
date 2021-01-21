@@ -85,6 +85,11 @@ This lab demonstrates a number of options for lambda views, as discussed in this
 ## Snapshot testing
 This lab demonstrates how to use snapshots to detect dbt model regressions, as discussed in this [discourse article](https://discourse.getdbt.com/t/build-snapshot-based-tests-to-detect-regressions-in-historic-data/1478). Additional details on how to test this code for yourself can be found at [snapshot-testing/README.md](snapshot-testing/README.md).
 
+## dynamic-data-masking-redshift
+This labs demonstrates how to implement dynamic data masking on Redshift.
+
+Check out [this discourse article](https://discourse.getdbt.com/t/how-to-implement-dynamic-data-masking-on-redshift/2043) for more information.
+
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
 - Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
