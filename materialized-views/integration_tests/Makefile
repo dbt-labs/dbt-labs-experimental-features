@@ -14,10 +14,10 @@ test-redshift:
 
 test-snowflake:
 	dbt deps
-	dbt seed --target snowflake --full-refresh
-	dbt run --target snowflake --full-refresh --vars 'update: false'
-	dbt run --target snowflake --vars 'update: true'
-	dbt test --target snowflake
+	dbt seed --profile garage-snowflake --full-refresh
+	dbt run --profile garage-snowflake --full-refresh --vars 'update: false'
+	dbt run --profile garage-snowflake --vars 'update: true'
+	dbt test --profile garage-snowflake
 
 test-bigquery:
 	dbt deps

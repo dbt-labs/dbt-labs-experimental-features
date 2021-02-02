@@ -20,34 +20,34 @@
 {%- endmacro %}
 
 
-{% macro redshift__is_materialized_view(relation) %}
+{% macro redshift__list_relations_without_caching(schema_relation) %}
+  {#
+    pretty silly, but this is the best Redshift has given us.
+    we effectively can't join stv_mv_info here,
+    because they're different types of sytem tables (pg_ vs. stv_)
+  #}
 
-    {% set existing_relation = load_relation(this) %}
-
-    {# materialized views do appear in pg_views #}
-    {% if existing_relation.is_view %}
-
-        {% set find_matview %}
-        
-            select count(*) from stv_mv_info
-            where schema = 'dbt_jcohen'
-            and name = 'test_mv'
-        
-        {% endset %}
-        
-        {% if execute %}
-            {% set result = run_query(find_matview)[0][0] %}
-        {% else %}
-            {% set result = 0 %}
-        {% endif %}
-
-        {% set is_matview = (result > 0) %}
-        {% do return(is_matview) %}
-        
-    {% else %}
-    
-        {% do return(false) %}
-        
-    {% endif %}
-
+  {% call statement('list_relations_without_caching', fetch_result=True) -%}
+    select
+      '{{ schema_relation.database }}' as database,
+      tablename as name,
+      schemaname as schema,
+      'table' as type
+    from pg_tables
+    where schemaname ilike '{{ schema_relation.schema }}'
+    union all
+    select
+      '{{ schema_relation.database }}' as database,
+      viewname as name,
+      schemaname as schema,
+      case when definition ilike '%create materialized view%'
+        then 'materializedview'
+        else 'view'
+        end as type
+    from pg_views
+    where schemaname ilike '{{ schema_relation.schema }}'
+  {% endcall %}
+  
+  {{ return(load_result('list_relations_without_caching').table) }}
 {% endmacro %}
+

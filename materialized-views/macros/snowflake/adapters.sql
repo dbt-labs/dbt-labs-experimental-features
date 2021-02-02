@@ -2,8 +2,6 @@
     {%- set secure = config.get('secure', default=false) -%}
     {%- set cluster_by_keys = config.get('cluster_by', default=none) -%}
     {%- set enable_automatic_clustering = config.get('automatic_clustering', default=false) -%}
-    {%- set raw_persist_docs = config.get('persist_docs', {}) -%}
-    {%- set relation_comment = get_relation_comment(raw_persist_docs, model) -%}
     {%- set sql_header = config.get('sql_header', none) -%}
 
     {%- if cluster_by_keys is not none and cluster_by_keys is string -%}
@@ -20,7 +18,6 @@
     create or replace 
         {% if secure -%} secure {%- endif %} 
         materialized view {{relation}}
-        {% if relation_comment is not none -%} comment = '{{relation_comment}}' {% endif %}
     as (
         {{sql}}
     );
@@ -33,4 +30,3 @@
     {%- endif -%}
 
 {% endmacro %}
-

@@ -17,7 +17,7 @@
     {{ sql_header if sql_header is not none }}
 
     create materialized view {{relation}}
-    {{ dbt_labs_experimental_features.bigquery_options(
+    {{ dbt_labs_materialized_views.bigquery_options(
         enable_refresh=enable_refresh, 
         refresh_interval_minutes=refresh_interval_minutes
     ) }}

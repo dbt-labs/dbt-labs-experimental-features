@@ -1,6 +1,7 @@
 
-name: 'dbt_labs_experimental_features_integration_tests'
-version: '0.1.0'
+name: 'dbt_labs_materialized_views_integration_tests'
+version: '0.2.0'
+config-version: 2
 
 profile: 'integration_tests'
 
