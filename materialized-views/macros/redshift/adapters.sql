@@ -1,4 +1,4 @@
-{% macro redshift__create_table_as(relation, sql, config) -%}
+{% macro redshift__create_materialized_view_as(relation, sql, config) -%}
 
   {%- set _dist = config.get('dist') -%}
   {%- set _sort_type = config.get(
@@ -8,16 +8,38 @@
           'sort',
           validator=validation.any[list, basestring]) -%}
   {%- set sql_header = config.get('sql_header', none) -%}
+  {%- set auto_refresh = 'yes' if config.get('auto_refresh', false) else 'no' %}
 
   {{ sql_header if sql_header is not none }}
 
   create materialized view {{ relation }}
     {{ dist(_dist) }}
     {{ sort(_sort_type, _sort) }}
+    auto refresh {{ auto_refresh }}
   as (
     {{ sql }}
   );
 {%- endmacro %}
+
+
+{% macro redshift__refresh_materialized_view(relation, config) -%}
+
+    {%- set is_auto_refresh = config.get('auto_refresh', true) %}
+
+    {%- if is_auto_refresh == false -%} {# manual refresh #}
+
+        refresh materialized view {{relation}}
+    
+    {%- else -%} {# automatic refresh #}
+    
+        {%- do log("Skipping materialized view " ~ relation ~ " because it is set
+            to refresh automatically") -%}
+            
+        {%- do return(none) -%}
+    
+    {%- endif -%}
+
+{% endmacro %}
 
 
 {% macro redshift__list_relations_without_caching(schema_relation) %}

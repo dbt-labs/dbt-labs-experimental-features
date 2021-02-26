@@ -30,16 +30,24 @@
       {% set build_sql = dbt_labs_materialized_views.refresh_materialized_view(target_relation, config) %}
   {% endif %}
 
-  {% call statement("main") %}
-      {{ build_sql }}
-  {% endcall %}
+  {% if build_sql %}
 
-  {{ run_hooks(post_hooks, inside_transaction=True) }}
-  
-  {% do persist_docs(target_relation, model) %}
+      {% call statement("main") %}
+          {{ build_sql }}
+      {% endcall %}
+      
+      {{ run_hooks(post_hooks, inside_transaction=True) }}
+      
+      {% do persist_docs(target_relation, model) %}
 
-  -- `COMMIT` happens here
-  {% do adapter.commit() %}
+      -- `COMMIT` happens here
+      {% do adapter.commit() %}
+ 
+  {% else %}
+
+    {{ store_result('main', 'SKIP') }}
+
+  {% endif %}  
 
   {% for rel in to_drop %}
       {% do adapter.drop_relation(rel) %}

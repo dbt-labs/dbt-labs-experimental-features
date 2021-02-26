@@ -10,7 +10,7 @@
 
 {% macro bigquery__create_materialized_view_as(relation, sql, config) -%}
 
-    {%- set enable_refresh = config.get('enable_refresh', none) -%}
+    {%- set enable_refresh = config.get('auto_refresh', none) -%}
     {%- set refresh_interval_minutes = config.get('refresh_interval_minutes', none) -%}
     {%- set sql_header = config.get('sql_header', none) -%}
 
@@ -30,7 +30,7 @@
 
 {% macro bigquery__refresh_materialized_view(relation, config) -%}
     
-    {%- set is_auto_refresh = config.get('enable_refresh', true) %}
+    {%- set is_auto_refresh = config.get('auto_refresh', true) %}
     
     {%- if is_auto_refresh == false -%} {# manual refresh #}
     

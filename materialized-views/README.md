@@ -41,7 +41,7 @@ The Postgres and Redshift implementations both require overriding the builtin ve
 
 ## Redshift
 
-- Supported model configs: `sort`, `dist`
+- Supported model configs: `sort`, `dist`, `auto_refresh`
 - [docs](https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-overview.html)
 - Anecdotally, `refresh materialized view ...` is _very_ slow to run
 - ❗❗ MVs do not support late binding, so if an underlying table is cascade-dropped, the MV will be dropped as well. This would be fine, except that MVs don't include their "true" dependencies in `pg_depend`. Instead, a materialized view claims to depend on a table relation called `mv_tbl__[MV_name]__0` (in place of the name of the true underlying table). As such, dbt has no way to know if a MV has been dropped when it cascade-drops the underlying table. (https://github.com/awslabs/amazon-redshift-utils/issues/499)
@@ -55,7 +55,7 @@ Database Error in model test_mv (models/test_mv.sql)
 
 ## BigQuery
 
-- Supported model configs: `enable_refresh`, `refresh_interval_minutes`
+- Supported model configs: `auto_refresh`, `refresh_interval_minutes`
 - [docs](https://cloud.google.com/bigquery/docs/materialized-views-intro)
 - ❗ Although BQ does not have `drop ... cascade`, if the base table of a MV is dropped and recreated, the MV also needs to be dropped and recreated
 ```
