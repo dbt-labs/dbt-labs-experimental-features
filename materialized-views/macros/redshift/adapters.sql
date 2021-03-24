@@ -73,3 +73,38 @@
   {{ return(load_result('list_relations_without_caching').table) }}
 {% endmacro %}
 
+
+{% macro redshift_load_relation_or_mv(relation) %}
+  
+  {% set rel = adapter.get_relation(
+    database=relation.database,
+    schema=relation.schema,
+    identifier=relation.identifier
+  ) -%}
+  
+  {% if rel.type == 'materializedview' and execute %}
+  
+    {# materialized views are not properly registered in pg_depend,
+       so the cache can miss that they've been dropped
+       https://github.com/awslabs/amazon-redshift-utils/issues/499 #}
+
+    {% set hard_check_mv_sql %}
+
+        select count(*) from stv_mv_info
+        where schema = '{{ rel.schema }}'
+        and name = '{{ rel.identifier }}'
+
+    {% endset %}
+
+    {% set result = run_query(hard_check_mv_sql)[0][0] %}
+    {% set mv_rel = rel if result > 0 else none %}
+    {% do return(mv_rel) %}
+  
+  {% else %}
+  
+    {% do return(rel) %}
+  
+  {% endif %}
+
+{% endmacro %}
+

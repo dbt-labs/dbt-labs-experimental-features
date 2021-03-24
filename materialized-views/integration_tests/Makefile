@@ -10,6 +10,7 @@ test-redshift:
 	dbt seed --target redshift --full-refresh
 	dbt run --target redshift --full-refresh --vars 'update: false'
 	dbt run --target redshift --vars 'update: true'
+	sleep 10	# wait for auto refresh
 	dbt test --target redshift
 
 test-snowflake:
