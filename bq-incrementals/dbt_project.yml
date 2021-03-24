@@ -1,6 +1,7 @@
 
 name: 'bq_incremental_testing'
 version: '0.1.0'
+config-version: 2
 
 profile: 'garage-bigquery'
 
