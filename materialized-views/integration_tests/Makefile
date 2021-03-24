@@ -10,14 +10,15 @@ test-redshift:
 	dbt seed --target redshift --full-refresh
 	dbt run --target redshift --full-refresh --vars 'update: false'
 	dbt run --target redshift --vars 'update: true'
+	sleep 10	# wait for auto refresh
 	dbt test --target redshift
 
 test-snowflake:
 	dbt deps
-	dbt seed --target snowflake --full-refresh
-	dbt run --target snowflake --full-refresh --vars 'update: false'
-	dbt run --target snowflake --vars 'update: true'
-	dbt test --target snowflake
+	dbt seed --profile garage-snowflake --full-refresh
+	dbt run --profile garage-snowflake --full-refresh --vars 'update: false'
+	dbt run --profile garage-snowflake --vars 'update: true'
+	dbt test --profile garage-snowflake
 
 test-bigquery:
 	dbt deps

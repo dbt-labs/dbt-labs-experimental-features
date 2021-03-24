@@ -1,6 +1,7 @@
-name: 'dbt_labs_experimental_features'
-version: '0.1.0'
+name: 'dbt_labs_materialized_views'
+version: '0.2.0'
 config-version: 2
+require-dbt-version: ">=0.18.0"
 
 source-paths: ["models"]
 analysis-paths: ["analysis"]
