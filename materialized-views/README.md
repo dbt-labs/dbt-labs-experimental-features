@@ -40,11 +40,7 @@ The Postgres and Redshift implementations both require overriding the builtin ve
 {% endmacro %}
 
 {% macro load_relation(relation) %}
-  {% if adapter.type() == 'redshift' %}
-    {{ return(dbt_labs_materialized_views.redshift_load_relation_or_mv(relation)) }}
-  {% else %}
-    {{ return(dbt.load_relation(relation)) }}
-  {% endif %}
+  {{ return(dbt_labs_materialized_views.redshift_load_relation_or_mv(relation)) }}
 {% endmacro %}
 ```
 
