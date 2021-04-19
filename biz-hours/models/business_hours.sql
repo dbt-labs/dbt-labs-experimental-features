@@ -26,9 +26,12 @@ business_hours as (
         converted_hours.date_hour as date_hour_start,
         dateadd('hour', 1, converted_hours.date_hour) as date_hour_end,
 
-        (dayofweek(converted_hours.date_hour) not in (0,6)
-            and hour(converted_hours.date_hour) between 8 and 19)
-        as is_business_hour
+        -- this logic might change over time to take into account whether the
+        -- schedule has changed over time
+        (
+            dayofweek(converted_hours.date_hour) not in (0,6)
+            and hour(converted_hours.date_hour) between 8 and 19
+        ) as is_business_hour
 
     from converted_hours
 
