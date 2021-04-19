@@ -1,0 +1,9 @@
+version: 2
+
+seeds:
+  - name: sample_tickets
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "last_closed_at >= first_closed_at or last_closed_at is null"
+      - dbt_utils.expression_is_true:
+          expression: "first_closed_at >= first_response_at or first_closed_at is null"
