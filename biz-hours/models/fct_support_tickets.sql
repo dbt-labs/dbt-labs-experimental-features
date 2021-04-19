@@ -18,6 +18,7 @@ aggregated_ticket_hours as (
         sum(business_minutes_to_first_close) as business_minutes_to_first_close,
         sum(calendar_minutes_to_last_close) as calendar_minutes_to_last_close,
         sum(business_minutes_to_last_close) as business_minutes_to_last_close
+
     from ticket_hours
     group by 1
 ),

@@ -27,7 +27,7 @@ business_hours as (
         dateadd('hour', 1, converted_hours.date_hour) as date_hour_end,
 
         -- this logic might change over time to take into account whether the
-        -- schedule has changed over time
+        -- schedule has changed
         (
             dayofweek(converted_hours.date_hour) not in (0,6)
             and hour(converted_hours.date_hour) between 8 and 19

@@ -10,7 +10,6 @@ business_hours as (
 
 -- one record per ticket per hour that it is "active"
 ticket_hours as (
-
     select
         *,
 
@@ -55,9 +54,7 @@ ticket_hours as (
 
     left join business_hours
         on date_trunc('hour', tickets.conversation_created_at) <= business_hours.date_hour_start
-        -- in reality don't need to do this pre-processing
         and date_trunc('hour', tickets.last_closed_at) >= business_hours.date_hour_start
-
 )
 
 select * from ticket_hours
