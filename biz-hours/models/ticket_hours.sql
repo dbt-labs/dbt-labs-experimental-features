@@ -13,22 +13,28 @@ ticket_hours as (
     select
         *,
 
-        datediff(
-            'minutes',
-            greatest(business_hours.date_hour_start, tickets.conversation_created_at),
-            least(business_hours.date_hour_end, tickets.first_response_at)
-        ) as calendar_minutes_to_first_solve,
+        greatest(
+            datediff(
+                'minutes',
+                greatest(business_hours.date_hour_start, tickets.conversation_created_at),
+                least(business_hours.date_hour_end, tickets.first_response_at)
+            ),
+            0
+        ) as calendar_minutes_to_first_response,
 
         case
             when business_hours.is_business_hour
-                then calendar_minutes_to_first_solve
+                then calendar_minutes_to_first_response
             else 0
-        end as business_minutes_to_first_solve,
+        end as business_minutes_to_first_response,
 
-        datediff(
-            'minutes',
-            greatest(business_hours.date_hour_start, tickets.conversation_created_at),
-            least(business_hours.date_hour_end, tickets.first_closed_at)
+        greatest(
+            datediff(
+                'minutes',
+                greatest(business_hours.date_hour_start, tickets.conversation_created_at),
+                least(business_hours.date_hour_end, tickets.first_closed_at)
+            ),
+            0
         ) as calendar_minutes_to_first_close,
 
         case
@@ -37,10 +43,13 @@ ticket_hours as (
             else 0
         end as business_minutes_to_first_close,
 
-        datediff(
-            'minutes',
-            greatest(business_hours.date_hour_start, tickets.conversation_created_at),
-            least(business_hours.date_hour_end, tickets.last_closed_at)
+        greatest(
+            datediff(
+                'minutes',
+                greatest(business_hours.date_hour_start, tickets.conversation_created_at),
+                least(business_hours.date_hour_end, tickets.last_closed_at)
+            ),
+            0
         ) as calendar_minutes_to_last_close,
 
         case
@@ -54,7 +63,11 @@ ticket_hours as (
 
     left join business_hours
         on date_trunc('hour', tickets.conversation_created_at) <= business_hours.date_hour_start
-        and date_trunc('hour', tickets.last_closed_at) >= business_hours.date_hour_start
+        -- since last_closed_at is null for some tickets, this join ignores them
+        and (
+            date_trunc('hour', tickets.last_closed_at) >= business_hours.date_hour_start
+            or tickets.last_closed_at is null
+        )
 )
 
 select * from ticket_hours
