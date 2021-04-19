@@ -14,34 +14,39 @@ ticket_hours as (
     select
         *,
 
+        datediff(
+            'minutes',
+            greatest(business_hours.date_hour_start, tickets.conversation_created_at),
+            least(business_hours.date_hour_end, tickets.first_response_at)
+        ) as calendar_minutes_to_first_solve,
+
         case
             when business_hours.is_business_hour
-                then datediff(
-                    'minutes',
-                    greatest(business_hours.date_hour_start, tickets.conversation_created_at),
-                    least(business_hours.date_hour_end, tickets.first_response_at)
-                )
+                then calendar_minutes_to_first_solve
             else 0
         end as business_minutes_to_first_solve,
 
+        datediff(
+            'minutes',
+            greatest(business_hours.date_hour_start, tickets.conversation_created_at),
+            least(business_hours.date_hour_end, tickets.first_closed_at)
+        ) as calendar_minutes_to_first_close,
 
         case
             when business_hours.is_business_hour
-                then datediff(
-                    'minutes',
-                    greatest(business_hours.date_hour_start, tickets.conversation_created_at),
-                    least(business_hours.date_hour_end, tickets.first_closed_at)
-                )
+                then calendar_minutes_to_first_close
             else 0
         end as business_minutes_to_first_close,
 
+        datediff(
+            'minutes',
+            greatest(business_hours.date_hour_start, tickets.conversation_created_at),
+            least(business_hours.date_hour_end, tickets.last_closed_at)
+        ) as calendar_minutes_to_last_close,
+
         case
             when business_hours.is_business_hour
-                then datediff(
-                    'minutes',
-                    greatest(business_hours.date_hour_start, tickets.conversation_created_at),
-                    least(business_hours.date_hour_end, tickets.last_closed_at)
-                )
+                then calendar_minutes_to_last_close
             else 0
         end as business_minutes_to_last_close
 
