@@ -11,8 +11,8 @@ data-paths: ["data"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-target-path: "target" 
-clean-targets:         
+target-path: "target"
+clean-targets:
     - "target"
     - "dbt_modules"
 
@@ -20,12 +20,12 @@ clean-targets:
 vars:
   working_hour_start: 8
   working_hour_end: 20
-  
+
 
 models:
   business_hours:
     +materialized: view
-          
+
 seeds:
   business_hours:
     sample_tickets:
@@ -34,7 +34,7 @@ seeds:
         user_id: varchar
         state: varchar
         subject: varchar
-        conversation_created_at_business: timestamp_ntz
-        first_response_at_business: timestamp_ntz
-        first_closed_at_business: timestamp_ntz
-        last_closed_at_business: timestamp_ntz
+        conversation_created_at: timestamp_ntz
+        first_response_at: timestamp_ntz
+        first_closed_at: timestamp_ntz
+        last_closed_at: timestamp_ntz
