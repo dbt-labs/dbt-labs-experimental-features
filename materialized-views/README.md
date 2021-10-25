@@ -14,27 +14,30 @@ If you're here, you may also like the [dbt-materialize](https://github.com/Mater
 
 ### General installation:
 
-You can install the materialized-view funcionality using one of the following methods.
+You can install the materialized-view project as a package, to get access to it in your own project, either as a `local` package (by cloning this repository to your machine) or as a `git` package referencing the `materialized-views` subdirectory:
+```yml
+# packages.yml
+packages:
+  - git: https://github.com/dbt-labs/dbt-labs-experimental-features.git
+    subdirectory: materialized-views
+```
 
-- Install this project as a package ([package-management docs](https://docs.getdbt.com/docs/building-a-dbt-project/package-management))
-  - [Local package](https://docs.getdbt.com/docs/building-a-dbt-project/package-management#local-packages): by referencing the [`materialized-views`](https://github.com/dbt-labs/dbt-labs-experimental-features/tree/master/materialized-views) folder.
-  - [Git package](https://docs.getdbt.com/docs/building-a-dbt-project/package-management#git-packages) using [project subdirectories](https://docs.getdbt.com/docs/building-a-dbt-project/package-management#git-packages): again by referencing the [`materialized-views`](https://github.com/dbt-labs/dbt-labs-experimental-features/tree/master/materialized-views) folder.
-- Copy-paste the files from `macros/` (specifically `default` and your adapter) into your own project.
+If you do this, you'll need to set the `dispatch` project config ([docs](https://docs.getdbt.com/reference/dbt-jinja-functions/dispatch)), since some functionality in this package requires overriding built-in dbt macros:
+```yml
+# dbt_project.yml
+dispatch:
+  - macro_namespace: dbt
+    search_order: ['dbt_labs_materialized_views', 'dbt']
+```
+
+You're also welcome to copy, paste, and edit the files from `macros/` (specifically `default` and your adapter) in your own project's `macros/` directory. If you find spots for improvement, we welcome PRs back to this repository.
 
 ### Extra installation steps for Postgres and Redshift
 
 The Postgres and Redshift implementations both require overriding the builtin versions of some adapter macros. If you've installed `dbt_labs_materialized_views` as a local package, you can achieve this override by creating a file `macros/*.sql` in your project with the following contents:
 
 ```sql
-{# postgres and redshift #}
-
-{% macro drop_relation(relation) -%}
-  {{ return(dbt_labs_materialized_views.drop_relation(relation)) }}
-{% endmacro %}
-
-{% macro postgres__list_relations_without_caching(schema_relation) %}
-  {{ return(dbt_labs_materialized_views.postgres__list_relations_without_caching(schema_relation)) }}
-{% endmacro %}
+{# postgres + redshift #}
 
 {% macro postgres_get_relations() %}
   {{ return(dbt_labs_materialized_views.postgres_get_relations()) }}
@@ -42,12 +45,12 @@ The Postgres and Redshift implementations both require overriding the builtin ve
 
 {# redshift only #}
 
-{% macro redshift__list_relations_without_caching(schema_relation) %}
-  {{ return(dbt_labs_materialized_views.redshift__list_relations_without_caching(schema_relation)) }}
-{% endmacro %}
-
 {% macro load_relation(relation) %}
-  {{ return(dbt_labs_materialized_views.redshift_load_relation_or_mv(relation)) }}
+  {% if adapter.type() == 'redshift' %}
+    {{ return(dbt_labs_materialized_views.redshift_load_relation_or_mv(relation)) }}
+  {% else %}
+    {{ return(dbt.load_relation(relation)) }}
+  {% endif %}
 {% endmacro %}
 ```
 
