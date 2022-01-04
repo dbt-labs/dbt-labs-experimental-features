@@ -1,0 +1,42 @@
+        
+name: 'business_hours'
+version: '1.0.0'
+config-version: 2
+profile: 'dbt-learn'
+
+require-dbt-version: [">=1.0.0"] 
+
+model-paths: ["models"]
+analysis-paths: ["analysis"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target" 
+clean-targets:         
+    - "target"
+    - "dbt_modules"
+
+# these variables will need to be in H24 format!
+vars:
+  working_hour_start: 8
+  working_hour_end: 20
+  
+
+models:
+  business_hours:
+    +materialized: view
+          
+seeds:
+  business_hours:
+    sample_tickets:
+      +column_types:
+        id: varchar
+        user_id: varchar
+        state: varchar
+        subject: varchar
+        conversation_created_at_business: timestamp_ntz
+        first_response_at_business: timestamp_ntz
+        first_closed_at_business: timestamp_ntz
+        last_closed_at_business: timestamp_ntz
