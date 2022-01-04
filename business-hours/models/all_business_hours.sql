@@ -45,22 +45,15 @@ business_hours as (
         date_hour,
 
         case
---before we hired a rep in MST (M-F, 8am - 5pm EST)
-            when date_hour::date < '2020-09-14'
-                and dayofweek(date_hour) not in (0,6)
-                and hour(date_hour) between 8 and 16
-                -- and holidays.date is null
-                    then converted_hours.date_hour
-
---after we hired a rep in MST  (M-F, 8am - 8pm EST)
-            when date_hour::date between '2020-09-14' and  '2021-09-01'
+--before we hired a rep in MST (M-F, 8am - 8pm EST)
+            when date_hour::date < '2021-09-14'
                 and dayofweek(date_hour) not in (0,6)
                 and hour(date_hour) between 8 and 19
                 -- and holidays.date is null
                     then converted_hours.date_hour
 
 -- after we hired international reps (covering Sunday 7pm to Friday 5pm)
-            when date_hour::date >=  '2021-09-01'
+            when date_hour::date >=  '2021-09-14'
                 and dayofweek(date_hour) = 0 --sundays after 7pm is fair game
                 and hour(date_hour) between 19 and 23
                 -- and holidays.date is null

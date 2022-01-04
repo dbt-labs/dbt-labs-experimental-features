@@ -58,7 +58,8 @@ The below macro will take three inputs into consideration:
 {%- macro business_minutes_between__2(start_date, end_date) -%}
     coalesce(
         case
-            when {{ working_min_between(start_date, end_date) }} = 0
+            -- take into account tickets opened and closed in same hour
+            when (date_trunc('hour', {{ start_date }} ) = date_trunc('hour', {{ end_date }} ))  
                 then datediff('minute', {{ start_date }}, {{ end_date }})
             else {{ working_min_between(start_date, end_date) }}
                 + (60 - extract(minute from {{ start_date }}))
