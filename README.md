@@ -19,8 +19,9 @@ This lab demonstrates a number of options for lambda views, as discussed in this
 ## [Snapshot testing](snapshot-testing)
 This lab demonstrates how to use snapshots to detect dbt model regressions, as discussed in this [discourse article](https://discourse.getdbt.com/t/build-snapshot-based-tests-to-detect-regressions-in-historic-data/1478). Additional details on how to test this code for yourself can be found at [snapshot-testing/README.md](snapshot-testing/README.md).
 
+
 ## [Dynamic data masking on Redshift](dynamic-data-masking-redshift)
-This labs demonstrates how to implement dynamic data masking on Redshift.
+This lab demonstrates how to implement dynamic data masking on Redshift.
 
 Check out [this discourse article](https://discourse.getdbt.com/t/how-to-implement-dynamic-data-masking-on-redshift/2043) for more information.
 
@@ -30,3 +31,10 @@ Check out [this discourse article](https://discourse.getdbt.com/t/how-to-impleme
 - Join the [chat](http://community.getdbt.com/) on Slack for live discussions and support
 - Find [dbt events](https://events.getdbt.com) near you
 - Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+
+
+## [Time on Task](business_hours)
+
+This lab demonstrates two strategies for measuring Time on Task. 
+
+Check out [this devhub article] (TODO: LINK) for more information.
