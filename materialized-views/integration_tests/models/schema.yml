@@ -1,7 +1,11 @@
 version: 2
 
 models:
-  - name: test_mv
+  - name: test_mv_manual
+    tests:
+      - dbt_utils.equality:
+          compare_model: ref('expected')
+  - name: test_mv_auto
     tests:
       - dbt_utils.equality:
           compare_model: ref('expected')
