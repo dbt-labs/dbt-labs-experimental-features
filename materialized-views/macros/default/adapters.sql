@@ -1,5 +1,5 @@
 {% macro create_materialized_view_as(relation, sql, config) %}
-    {{ return(adapter.dispatch('create_materialized_view_as', packages = ['dbt_labs_materialized_views'])(relation, sql, config)) }}
+    {{ return(adapter.dispatch('create_materialized_view_as', macro_namespace = 'dbt_labs_materialized_views')(relation, sql, config)) }}
 {% endmacro %}
 
 {% macro default__create_materialized_view_as(relation, sql, config) -%}
@@ -11,7 +11,7 @@
 {% endmacro %}
 
 {% macro refresh_materialized_view(relation, config) %}
-    {{ return(adapter.dispatch('refresh_materialized_view', packages = ['dbt_labs_materialized_views'])(relation, config)) }}
+    {{ return(adapter.dispatch('refresh_materialized_view', macro_namespace = 'dbt_labs_materialized_views')(relation, config)) }}
 {% endmacro %}
 
 {% macro default__refresh_materialized_view(relation, config) -%}
