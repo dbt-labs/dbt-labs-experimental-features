@@ -8,7 +8,7 @@ At any point, if the database object corresponding to a MV model exists instead 
 
 Materialized views vary significantly across databases, as do their current limitations. Be sure to read the documentation for your adapter.
 
-If you're here, you may also like the [dbt-materialize](https://github.com/MaterializeInc/dbt-materialize) plugin, which enables dbt to materialize models as materialized views in [Materialize](https://materialize.io/).
+If you're here, you may also like the [dbt-materialize](https://github.com/MaterializeInc/materialize/tree/main/misc/dbt-materialize) plugin, which enables dbt to materialize models as materialized views in [Materialize](https://materialize.io/).
 
 ## Setup
 
