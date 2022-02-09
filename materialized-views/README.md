@@ -12,9 +12,16 @@ If you're here, you may also like the [dbt-materialize](https://github.com/Mater
 
 ## Setup
 
-You can:
-- Install this project as a local package (as in the [integration tests](integration_tests/packages.yml))
-- Copy-paste the files from `macros/` (specifically `default` and your adapter) into your own project
+### General installation:
+
+You can install the materialized-view funcionality using one of the following methods.
+
+- Install this project as a package ([package-management docs](https://docs.getdbt.com/docs/building-a-dbt-project/package-management))
+  - [Local package](https://docs.getdbt.com/docs/building-a-dbt-project/package-management#local-packages): by referencing the [`materialized-views`](https://github.com/dbt-labs/dbt-labs-experimental-features/tree/master/materialized-views) folder.
+  - [Git package](https://docs.getdbt.com/docs/building-a-dbt-project/package-management#git-packages) using [project subdirectories](https://docs.getdbt.com/docs/building-a-dbt-project/package-management#git-packages): again by referencing the [`materialized-views`](https://github.com/dbt-labs/dbt-labs-experimental-features/tree/master/materialized-views) folder.
+- Copy-paste the files from `macros/` (specifically `default` and your adapter) into your own project.
+
+### Extra installation steps for Postgres and Redshift
 
 The Postgres and Redshift implementations both require overriding the builtin versions of some adapter macros. If you've installed `dbt_labs_materialized_views` as a local package, you can achieve this override by creating a file `macros/*.sql` in your project with the following contents:
 
