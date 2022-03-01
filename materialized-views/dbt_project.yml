@@ -3,10 +3,10 @@ version: '0.2.0'
 config-version: 2
 require-dbt-version: ">=0.18.0"
 
-source-paths: ["models"]
+model-paths: ["models"]
 analysis-paths: ["analysis"]
 test-paths: ["tests"]
-data-paths: ["data"]
+seed-paths: ["seed"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
