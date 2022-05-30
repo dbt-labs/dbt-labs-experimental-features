@@ -11,7 +11,7 @@ In all cases, these are _demo_ projects, not intended as ready-to-use packages. 
 
 ## [Materialized views](materialized-views)
 
-This project adds support for `materialized_view` as a new dbt materialization. It includes implementations for Postgres, Redshift, Snowflake, and BigQuery, through a mix of new macros and overrides of built-in dbt macros. See the [project README](materialized-views/README.md) for details. For another take on dbt + materialized views, check out the [dbt-materialize](https://github.com/MaterializeInc/dbt-materialize) plugin.
+This project adds support for `materialized_view` as a new dbt materialization. It includes implementations for Postgres, Redshift, Snowflake, and BigQuery, through a mix of new macros and overrides of built-in dbt macros. See the [project README](materialized-views/README.md) for details. For another take on dbt + materialized views, check out the [dbt-materialize](https://github.com/MaterializeInc/materialize/tree/main/misc/dbt-materialize#dbt-materialize) plugin.
 
 ## [Lambda views](lambda-views)
 This lab demonstrates a number of options for lambda views, as discussed in this [discourse article](https://discourse.getdbt.com/t/how-to-create-near-real-time-models-with-just-dbt-sql/1457/3). Additional details about the various approaches can be found in at [lambda-views/README.md](lambda-views/README.md).
@@ -25,16 +25,15 @@ This lab demonstrates how to implement dynamic data masking on Redshift.
 
 Check out [this discourse article](https://discourse.getdbt.com/t/how-to-implement-dynamic-data-masking-on-redshift/2043) for more information.
 
-### Resources:
+## [Time on Task](business_hours)
+
+This lab demonstrates two strategies for measuring Time on Task. 
+
+Check out [this devhub article](https://docs.getdbt.com/blog/measuring-business-hours-sql-time-on-task) for more information.
+
+## Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
 - Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
 - Join the [chat](http://community.getdbt.com/) on Slack for live discussions and support
 - Find [dbt events](https://events.getdbt.com) near you
 - Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
-
-
-## [Time on Task](business_hours)
-
-This lab demonstrates two strategies for measuring Time on Task. 
-
-Check out [this devhub article] (TODO: LINK) for more information.
