@@ -14,9 +14,15 @@
     {%- set refresh_interval_minutes = config.get('refresh_interval_minutes', none) -%}
     {%- set sql_header = config.get('sql_header', none) -%}
 
+    {%- set raw_partition_by = config.get('partition_by', none) -%}
+    {%- set partition_config = adapter.parse_partition_by(raw_partition_by) -%}
+    {%- set raw_cluster_by = config.get('cluster_by', none) -%}
+
     {{ sql_header if sql_header is not none }}
 
     create materialized view {{relation}}
+    {{ partition_by(partition_config) }}
+    {{ cluster_by(raw_cluster_by) }}
     {{ dbt_labs_materialized_views.bigquery_options(
         enable_refresh=enable_refresh, 
         refresh_interval_minutes=refresh_interval_minutes
