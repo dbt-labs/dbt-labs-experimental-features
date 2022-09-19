@@ -22,4 +22,3 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 seeds:
   +quote_columns: false
-
