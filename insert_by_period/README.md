@@ -12,8 +12,6 @@ Progress is logged in the command line for easy monitoring.
 This is not a package on the Package Hub. To install it via git, add this to `packages.yml`:
 ```yaml
 packages:
-  - package: dbt-labs/dbt_utils
-    version: 0.9.2
   - git: https://github.com/dbt-labs/dbt-labs-experimental-features
     subdirectory: insert_by_period
     revision: XXXX #optional. Provide a full git sha hash, e.g. 7180db61d26836b931aa6ef8ad9d70e7fb3a69fa. If not provided, uses the current HEAD.
