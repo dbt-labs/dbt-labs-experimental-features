@@ -12,8 +12,6 @@
 
   {%- set filtered_sql = sql | replace("__PERIOD_FILTER__", period_filter) -%}
 
-  {{ print(filtered_sql) }}
-
   select
     {{target_cols_csv}}
   from (
