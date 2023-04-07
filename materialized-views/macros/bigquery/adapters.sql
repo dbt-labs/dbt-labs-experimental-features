@@ -14,6 +14,7 @@
     {%- set refresh_interval_minutes = config.get('refresh_interval_minutes', none) -%}
     {%- set sql_header = config.get('sql_header', none) -%}
     {%- set allow_non_incremental_definition = config.get('allow_non_incremental_definition', none) -%}
+    {%- set max_staleness = config.get('max_staleness', none) -%}
 
     {{ sql_header if sql_header is not none }}
 
@@ -21,7 +22,8 @@
     {{ dbt_labs_materialized_views.bigquery_options(
         enable_refresh=enable_refresh, 
         refresh_interval_minutes=refresh_interval_minutes,
-        allow_non_incremental_definition=allow_non_incremental_definition
+        allow_non_incremental_definition=allow_non_incremental_definition,
+        max_staleness=max_staleness
     ) }}
     as (
         {{ sql }}
