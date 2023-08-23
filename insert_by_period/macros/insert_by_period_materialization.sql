@@ -54,15 +54,18 @@
     {%- endcall %}
   {%- endif %}
 
-  {% set _ = insert_by_period.get_period_boundaries(schema,
-                                              identifier,
-                                              timestamp_field,
-                                              start_date,
-                                              stop_date,
-                                              period) %}
-  {%- set start_timestamp = load_result('period_boundaries')['data'][0][0] | string -%}
-  {%- set stop_timestamp = load_result('period_boundaries')['data'][0][1] | string -%}
-  {%- set num_periods = load_result('period_boundaries')['data'][0][2] | int -%}
+  {% set period_boundaries = insert_by_period.get_period_boundaries(
+    schema,
+    identifier,
+    timestamp_field,
+    start_date,
+    stop_date,
+    period
+  ) %}
+  {% set period_boundaries_results = load_result('period_boundaries')['data'][0] %}
+  {%- set start_timestamp = period_boundaries_results[0] | string -%}
+  {%- set stop_timestamp = period_boundaries_results[1] | string -%}
+  {%- set num_periods = period_boundaries_results[2] | int -%}
 
   {% set target_columns = adapter.get_columns_in_relation(target_relation) %}
   {%- set target_cols_csv = target_columns | map(attribute='quoted') | join(', ') -%}
