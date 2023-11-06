@@ -18,8 +18,12 @@
   
   {% elif full_refresh_mode or existing_relation.type != 'materializedview' %}
       {#-- Make sure the backup doesn't exist so we don't encounter issues with the rename below #}
-      {% set backup_identifier = existing_relation.identifier ~ "__dbt_backup" %}
-      {% set backup_relation = existing_relation.incorporate(path={"identifier": backup_identifier}) %}
+      {%- set backup_identifier = model['name'] + '__dbt_backup' -%}
+      {%- set backup_relation_type = 'materializedview' if existing_relation is none else existing_relation.type -%}
+      {%- set backup_relation = api.Relation.create(identifier=backup_identifier,
+                                                schema=schema,
+                                                database=database,
+                                                type=backup_relation_type) -%}
       {% do adapter.drop_relation(backup_relation) %}
 
       {% do adapter.rename_relation(target_relation, backup_relation) %}
