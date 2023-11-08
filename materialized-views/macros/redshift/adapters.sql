@@ -90,9 +90,10 @@
 
     {% set hard_check_mv_sql %}
 
-        select count(*) from stv_mv_info
-        where schema = '{{ rel.schema }}'
-        and name = '{{ rel.identifier }}'
+        select count(*) from pg_tables
+        where schemaname = '{{ rel.schema }}'
+        and tablename like 'mv_tbl__{{ rel.identifier }}__%'
+        and tableowner = 'rdsdb'
 
     {% endset %}
 
@@ -107,4 +108,3 @@
   {% endif %}
 
 {% endmacro %}
-
