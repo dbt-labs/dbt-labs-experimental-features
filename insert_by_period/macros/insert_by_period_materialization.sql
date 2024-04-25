@@ -36,14 +36,10 @@
     {%- set old_relation = none -%}
   {%- endif %}
 
-  {{run_hooks(pre_hooks, inside_transaction=False)}}
+  {{ run_hooks(pre_hooks, inside_transaction=False) }}
 
-  -- `begin` happens here, so `commit` after it to finish the transaction
-  {{run_hooks(pre_hooks, inside_transaction=True)}}
-  {% call statement() -%}
-    begin; -- make extra sure we've closed out the transaction
-    commit;
-  {%- endcall %}
+  -- `BEGIN` happens here:
+  {{ run_hooks(pre_hooks, inside_transaction=True) }}
 
   -- build model
   {% if force_create or old_relation is none -%}
@@ -97,7 +93,7 @@
       (
           select
               {{target_cols_csv}}
-          from {{tmp_relation.include(schema=False)}}
+          from {{tmp_relation.include(schema=True)}}
       );
     {%- endcall %}
     {% set result = load_result('main-' ~ i) %}
@@ -115,17 +111,21 @@
 
   {%- endfor %}
 
-  {% call statement() -%}
-    begin;
-  {%- endcall %}
+  -- from the table mat
+  {% do create_indexes(target_relation) %}
 
-  {{run_hooks(post_hooks, inside_transaction=True)}}
+  {{ run_hooks(post_hooks, inside_transaction=True) }}
 
-  {% call statement() -%}
-    commit;
-  {%- endcall %}
+  {% set should_revoke = should_revoke(existing_relation, full_refresh_mode=True) %}
+  {% do apply_grants(target_relation, grant_config, should_revoke=should_revoke) %}
 
-  {{run_hooks(post_hooks, inside_transaction=False)}}
+  {% do persist_docs(target_relation, model) %}
+
+  -- `COMMIT` happens here
+  {{ adapter.commit() }}
+
+  {{ run_hooks(post_hooks, inside_transaction=False) }}
+  -- end from the table mat
 
   {%- set status_string = "INSERT " ~ loop_vars['sum_rows_inserted'] -%}
 

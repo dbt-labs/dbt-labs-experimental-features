@@ -2,10 +2,10 @@
 	config(
 		materialized = 'insert_by_period',
 		period = 'month',
-		timestamp_field = 'created_at',
+		timestamp_field = 'cast(created_at as timestamp)',
 		start_date = '2018-01-01',
 		stop_date = '2018-06-01',
-		enabled=(target.type == 'snowflake')
+		enabled=(project_name == 'insert_by_period_integration_tests'),
 	)
 }}
 

@@ -1,5 +1,5 @@
 
-name: 'dbt_utils_integration_tests'
+name: 'insert_by_period_integration_tests'
 version: '1.0'
 
 profile: 'integration_tests'
