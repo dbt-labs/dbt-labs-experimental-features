@@ -124,9 +124,6 @@
   -- `COMMIT` happens here
   {{ adapter.commit() }}
 
-  -- finally, drop the existing/backup relation after the commit
-  {# {{ drop_relation_if_exists(backup_relation) }} #}
-
   {{ run_hooks(post_hooks, inside_transaction=False) }}
   -- end from the table mat
 
