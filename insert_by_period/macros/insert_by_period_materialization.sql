@@ -36,14 +36,10 @@
     {%- set old_relation = none -%}
   {%- endif %}
 
-  {{run_hooks(pre_hooks, inside_transaction=False)}}
+  {{ run_hooks(pre_hooks, inside_transaction=False) }}
 
-  -- `begin` happens here, so `commit` after it to finish the transaction
-  {{run_hooks(pre_hooks, inside_transaction=True)}}
-  {% call statement() -%}
-    begin; -- make extra sure we've closed out the transaction
-    commit;
-  {%- endcall %}
+  -- `BEGIN` happens here:
+  {{ run_hooks(pre_hooks, inside_transaction=True) }}
 
   -- build model
   {% if force_create or old_relation is none -%}
@@ -79,7 +75,7 @@
     {%- set tmp_identifier = model['name'] ~ '__dbt_incremental_period' ~ i ~ '_tmp' -%}
     {%- set tmp_relation = insert_by_period.create_relation_for_insert_by_period(tmp_identifier, schema, 'table') -%}
     {% call statement() -%}
-      {% set tmp_table_sql = insert_by_period.get_period_sql(target_cols_csv,
+      {% set tmp_table_sql = get_period_sql(target_cols_csv,
                                                        sql,
                                                        timestamp_field,
                                                        period,
@@ -97,11 +93,16 @@
       (
           select
               {{target_cols_csv}}
-          from {{tmp_relation.include(schema=False)}}
+          from {{tmp_relation.include(schema=True)}}
       );
     {%- endcall %}
     {% set result = load_result('main-' ~ i) %}
-    {% if 'response' in result.keys() %} {# added in v0.19.0 #}
+    
+    {% if target.type == 'databricks' %} {# databricks provides rows affected in 'data' and not 'response' #}
+      {% if 'data' in result.keys() %}
+        {% set rows_inserted = result['data'][0][0] | int %}
+      {% endif %}
+    {% elif 'response' in result.keys() %} {# added in v0.19.0 #}
         {% set rows_inserted = result['response']['rows_affected'] %}
     {% else %} {# older versions #}
         {% set rows_inserted = result['status'].split(" ")[2] | int %}
@@ -115,17 +116,24 @@
 
   {%- endfor %}
 
-  {% call statement() -%}
-    begin;
-  {%- endcall %}
+  -- from the table mat
+  {% do create_indexes(target_relation) %}
 
-  {{run_hooks(post_hooks, inside_transaction=True)}}
+  {{ run_hooks(post_hooks, inside_transaction=True) }}
 
-  {% call statement() -%}
-    commit;
-  {%- endcall %}
+  {% set should_revoke = should_revoke(existing_relation, full_refresh_mode=True) %}
+  {% do apply_grants(target_relation, grant_config, should_revoke=should_revoke) %}
 
-  {{run_hooks(post_hooks, inside_transaction=False)}}
+  {% do persist_docs(target_relation, model) %}
+
+  -- `COMMIT` happens here
+  {{ adapter.commit() }}
+
+  -- finally, drop the existing/backup relation after the commit
+  {# {{ drop_relation_if_exists(backup_relation) }} #}
+
+  {{ run_hooks(post_hooks, inside_transaction=False) }}
+  -- end from the table mat
 
   {%- set status_string = "INSERT " ~ loop_vars['sum_rows_inserted'] -%}
 

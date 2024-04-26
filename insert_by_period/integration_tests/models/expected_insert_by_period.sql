@@ -1,7 +1,7 @@
 {{
 	config(
 		materialized = 'view',
-		enabled=(target.type == 'snowflake')
+		enabled=(project_name == 'insert_by_period_integration_tests')
 	)
 }}
 

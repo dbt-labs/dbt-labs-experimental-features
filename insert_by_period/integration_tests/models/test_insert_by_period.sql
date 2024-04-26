@@ -5,7 +5,7 @@
 		timestamp_field = 'created_at',
 		start_date = '2018-01-01',
 		stop_date = '2018-06-01',
-		enabled=(target.type == 'snowflake')
+		enabled=(project_name == 'insert_by_period_integration_tests')
 	)
 }}
 

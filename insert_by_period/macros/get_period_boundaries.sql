@@ -14,7 +14,7 @@
                                 "nullif('" ~ stop_date ~ "','')::timestamp") }},
             {{ dbt.current_timestamp() }}
           ) as stop_timestamp
-      from "{{target_schema}}"."{{target_table}}"
+      from {{adapter.quote(target_schema)}}.{{adapter.quote(target_table)}}
     )
 
     select

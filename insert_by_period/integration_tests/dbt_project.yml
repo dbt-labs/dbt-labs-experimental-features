@@ -1,12 +1,18 @@
 
-name: 'dbt_utils_integration_tests'
+name: 'insert_by_period_integration_tests'
 version: '1.0'
-
-profile: 'integration_tests'
 
 # require-dbt-version: inherit this from dbt-utils
 
 config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'integration_tests'
+
+dispatch:
+ - macro_namespace: dbt_utils
+   search_order: ['spark_utils', 'dbt_utils', 'insert_by_period_integration_tests']
+
 
 model-paths: ["models"]
 analysis-paths: ["analysis"]
