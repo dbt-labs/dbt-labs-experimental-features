@@ -1,7 +1,7 @@
 {{
 	config(
 		materialized = 'view',
-		enabled=(project_name == 'insert_by_period_integration_tests')
+		enabled=(project_name == 'insert_by_period_integration_tests'),
 	)
 }}
 

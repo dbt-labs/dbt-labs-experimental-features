@@ -75,7 +75,7 @@
     {%- set tmp_identifier = model['name'] ~ '__dbt_incremental_period' ~ i ~ '_tmp' -%}
     {%- set tmp_relation = insert_by_period.create_relation_for_insert_by_period(tmp_identifier, schema, 'table') -%}
     {% call statement() -%}
-      {% set tmp_table_sql = get_period_sql(target_cols_csv,
+      {% set tmp_table_sql = insert_by_period.get_period_sql(target_cols_csv,
                                                        sql,
                                                        timestamp_field,
                                                        period,
@@ -128,9 +128,6 @@
 
   -- `COMMIT` happens here
   {{ adapter.commit() }}
-
-  -- finally, drop the existing/backup relation after the commit
-  {# {{ drop_relation_if_exists(backup_relation) }} #}
 
   {{ run_hooks(post_hooks, inside_transaction=False) }}
   -- end from the table mat
