@@ -11,7 +11,7 @@ config-version: 2
 require-dbt-version: [">=1.3.0", "<2.0.0"]
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'dbt_labs_experimental_features__databricks'
+profile: 'insert_by_period'
 
 dispatch:
  - macro_namespace: dbt_utils
