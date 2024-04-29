@@ -22,3 +22,7 @@ quoting:
     
 seeds:
   quote_columns: false
+
+dispatch:
+  - macro_namespace: dbt
+    search_order: ['dbt_labs_materialized_views', 'dbt']
