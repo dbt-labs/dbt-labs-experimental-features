@@ -13,6 +13,10 @@ require-dbt-version: [">=1.3.0", "<2.0.0"]
 # This setting configures which "profile" dbt uses for this project.
 profile: 'insert_by_period'
 
+dispatch:
+ - macro_namespace: dbt_utils
+   search_order: ['spark_utils', 'dbt_utils']
+
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
 # found in the "models/" directory. You probably won't need to change these!

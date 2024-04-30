@@ -97,16 +97,13 @@
       );
     {%- endcall %}
     {% set result = load_result('main-' ~ i) %}
-    {% if 'response' in result.keys() %} {# added in v0.19.0 #}
-        {% set rows_inserted = result['response']['rows_affected'] %}
-    {% else %} {# older versions #}
-        {% set rows_inserted = result['status'].split(" ")[2] | int %}
-    {% endif %}
+    
+    {% set rows_inserted = insert_by_period.get_rows_inserted(result) %}
 
     {%- set sum_rows_inserted = loop_vars['sum_rows_inserted'] + rows_inserted -%}
     {%- if loop_vars.update({'sum_rows_inserted': sum_rows_inserted}) %} {% endif -%}
 
-    {%- set msg = "Ran for " ~ period ~ " " ~ (i + 1) ~ " of " ~ (num_periods) ~ "; " ~ rows_inserted ~ " records inserted" -%}
+    {%- set msg = "Ran for " ~ period ~ " " ~ (i + 1) ~ " of " ~ (num_periods) ~ "; " ~ rows_inserted ~ " record(s) inserted" -%}
     {{ print(msg) }}
 
   {%- endfor %}

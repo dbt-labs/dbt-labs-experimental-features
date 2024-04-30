@@ -47,3 +47,12 @@ integration_tests:
       warehouse: "{{ env_var('SNOWFLAKE_TEST_WAREHOUSE') }}"
       schema: dbt_utils_integration_tests_snowflake
       threads: 10
+
+    databricks:
+      type: databricks
+      catalog: "{{ env_var('DATABRICKS_TEST_CATALOG') }}"
+      host: "{{ env_var('DATABRICKS_TEST_HOST') }}"
+      http_path: "{{ env_var('DATABRICKS_TEST_HTTP_PATH') }}"
+      token: "{{ env_var('DATABRICKS_TEST_TOKEN') }}"
+      schema: dbt_utils_integration_tests_databricks
+      threads: 4
