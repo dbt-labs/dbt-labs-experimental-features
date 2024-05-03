@@ -59,6 +59,7 @@
     stop_date,
     period,
     overwrite,
+    full_refresh_mode,
   ) %}
   {% set period_boundaries_results = load_result('period_boundaries')['data'][0] %}
   {%- set start_timestamp = period_boundaries_results[0] | string -%}

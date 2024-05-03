@@ -5,6 +5,7 @@
 		timestamp_field = 'cast(created_at as timestamp)',
 		start_date = '2018-01-01',
 		stop_date = '2018-06-01',
+		overwrite = var('test_overwrite', False),
 		enabled=(project_name == 'insert_by_period_integration_tests'),
 	)
 }}

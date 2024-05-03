@@ -1,13 +1,13 @@
-{% macro get_period_boundaries(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite) -%}
-    {{ return(adapter.dispatch('get_period_boundaries', 'insert_by_period')(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite)) }}
+{% macro get_period_boundaries(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite, full_refresh_mode) -%}
+    {{ return(adapter.dispatch('get_period_boundaries', 'insert_by_period')(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite, full_refresh_mode)) }}
 {% endmacro %}
 
-{% macro default__get_period_boundaries(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite) -%}
+{% macro default__get_period_boundaries(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite, full_refresh_mode) -%}
 
   {% call statement('period_boundaries', fetch_result=True) -%}
     with data as (
       select
-          {%- if overwrite -%}
+          {% if overwrite and not full_refresh_mode -%}
             '{{start_date}}'::timestamp as start_timestamp,
           {%- else -%}
             coalesce(max({{timestamp_field}}), '{{start_date}}')::timestamp as start_timestamp,
