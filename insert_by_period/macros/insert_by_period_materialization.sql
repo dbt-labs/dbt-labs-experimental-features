@@ -3,6 +3,7 @@
   {%- set start_date = config.require('start_date') -%}
   {%- set stop_date = config.get('stop_date') or '' -%}
   {%- set period = config.get('period') or 'week' -%}
+  {%- set overwrite = config.get('overwrite') or False -%}
 
   {%- if sql.find('__PERIOD_FILTER__') == -1 -%}
     {%- set error_message -%}
@@ -56,7 +57,8 @@
     timestamp_field,
     start_date,
     stop_date,
-    period
+    period,
+    overwrite,
   ) %}
   {% set period_boundaries_results = load_result('period_boundaries')['data'][0] %}
   {%- set start_timestamp = period_boundaries_results[0] | string -%}

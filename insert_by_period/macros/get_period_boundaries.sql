@@ -1,13 +1,17 @@
-{% macro get_period_boundaries(target_schema, target_table, timestamp_field, start_date, stop_date, period) -%}
-    {{ return(adapter.dispatch('get_period_boundaries', 'insert_by_period')(target_schema, target_table, timestamp_field, start_date, stop_date, period)) }}
+{% macro get_period_boundaries(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite) -%}
+    {{ return(adapter.dispatch('get_period_boundaries', 'insert_by_period')(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite)) }}
 {% endmacro %}
 
-{% macro default__get_period_boundaries(target_schema, target_table, timestamp_field, start_date, stop_date, period) -%}
+{% macro default__get_period_boundaries(target_schema, target_table, timestamp_field, start_date, stop_date, period, overwrite) -%}
 
   {% call statement('period_boundaries', fetch_result=True) -%}
     with data as (
       select
-          coalesce(max({{timestamp_field}}), '{{start_date}}')::timestamp as start_timestamp,
+          {%- if overwrite -%}
+            '{{start_date}}'::timestamp as start_timestamp,
+          {%- else -%}
+            coalesce(max({{timestamp_field}}), '{{start_date}}')::timestamp as start_timestamp,
+          {%- endif %}
           coalesce(
             {{ dateadd('millisecond',
                                 -1,
