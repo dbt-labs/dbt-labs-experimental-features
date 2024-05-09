@@ -5,7 +5,7 @@ models:
     tests:
       - dbt_utils.equality:
           compare_model: ref('expected_insert_by_period')
-          enabled: "{{not var('test_overwrite', False)}}"
+          enabled: "{{not var('test_backfill', False)}}"
       - dbt_utils.equality:
           compare_model: ref('expected_insert_by_period_overwrite')
-          enabled: "{{var('test_overwrite', False)}}"
+          enabled: "{{var('test_backfill', False)}}"

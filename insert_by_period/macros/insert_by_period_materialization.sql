@@ -3,7 +3,7 @@
   {%- set start_date = config.require('start_date') -%}
   {%- set stop_date = config.get('stop_date') or '' -%}
   {%- set period = config.get('period') or 'week' -%}
-  {%- set overwrite = config.get('overwrite') or False -%}
+  {%- set backfill = config.get('backfill') or False -%}
 
   {%- if sql.find('__PERIOD_FILTER__') == -1 -%}
     {%- set error_message -%}
@@ -58,7 +58,7 @@
     start_date,
     stop_date,
     period,
-    overwrite,
+    backfill,
     full_refresh_mode,
   ) %}
   {% set period_boundaries_results = load_result('period_boundaries')['data'][0] %}
