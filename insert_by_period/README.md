@@ -46,7 +46,7 @@ with events as (
 
 **Caveats:**
 
-- This materialization has been written for Redshift.
+- This materialization is compatible and tested for a subset of adapters for now: BigQuery, Databricks, PostgreSQL, Redshift and Snowflake.
 - This materialization can only be used for a model where records are not expected to change after they are created.
 - Any model post-hooks that use `{{ this }}` will fail using this materialization. For example:
 
