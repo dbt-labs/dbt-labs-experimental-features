@@ -11,6 +11,12 @@ In all cases, these are _demo_ projects, not intended as ready-to-use packages. 
 
 ## [Materialized views](materialized-views)
 
+> [!CAUTION]
+> The implementation in this repo is no longer maintained.
+> Materialized Views have been fully supported in dbt Cor since version `1.7` (November 2023).
+> See [dbt docs: materialized views](https://docs.getdbt.com/docs/build/materializations#materialized-view) for more information.
+
+
 This project adds support for `materialized_view` as a new dbt materialization. It includes implementations for Postgres, Redshift, Snowflake, and BigQuery, through a mix of new macros and overrides of built-in dbt macros. See the [project README](materialized-views/README.md) for details. For another take on dbt + materialized views, check out the [dbt-materialize](https://github.com/MaterializeInc/materialize/tree/main/misc/dbt-materialize#dbt-materialize) plugin.
 
 ## [Lambda views](lambda-views)
