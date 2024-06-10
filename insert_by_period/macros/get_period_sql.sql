@@ -41,7 +41,6 @@
 
 
 {% macro trino__get_period_sql(target_cols_csv, sql, timestamp_field, period, start_timestamp, stop_timestamp, offset) -%}
-  {{ print('use trino get period sql') }}
 
   {%- set period_filter -%}
     ({{timestamp_field}} >  cast('{{start_timestamp}}' as timestamp) + interval '{{offset}}' {{period}} and
