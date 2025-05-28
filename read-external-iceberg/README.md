@@ -5,7 +5,7 @@
 
 An experimental extension to [dbt-labs/dbt-external-tables](https://github.com/dbt-labs/dbt-external-tables) that adds support for creating Iceberg tables pointing to external catalogs unmanaged by the warehouse of a dbt project.
 
-See this discussion for more context
+for more context: see this discussion: [dbt-core#11171: Just the tip of the Iceberg](https://github.com/dbt-labs/dbt-core/discussions/11171) 
 
 
 ## Supported databases
