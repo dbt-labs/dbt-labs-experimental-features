@@ -1,5 +1,10 @@
 ## dbt_labs_materialized_views
 
+> [!CAUTION]
+> The implementation in this repo is no longer maintained.
+> Materialized Views have been fully supported in dbt Cor since version `1.7` (November 2023).
+> See [dbt docs: materialized views](https://docs.getdbt.com/docs/build/materializations#materialized-view) for more information.
+
 `dbt_labs_materialized_views` is a dbt project containing materializations, helper macros, and some builtin macro overrides that enable use of materialized views in your dbt project. It takes a conceptual approach similar to that of the existing `incremental` materialization:
 - In a "full refresh" run, drop and recreate the MV from scratch.
 - Otherwise, "refresh" the MV as appropriate. Depending on the database, that could require DML (`refresh`) or no action.
