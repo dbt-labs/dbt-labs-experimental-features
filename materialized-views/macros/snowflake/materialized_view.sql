@@ -12,7 +12,10 @@
 
   {% if (existing_relation is none or full_refresh_mode) %}
       {% set build_sql = dbt_labs_materialized_views.create_materialized_view_as(target_relation, sql, config) %}
-  {% elif existing_relation.is_view or existing_relation.is_table %}
+  {#-- elif existing_reation.is_view --#}
+      {#-- Snowflake `show terse objects` does not distinguish between views and materialized views, so our adapter cache can't either. --#}
+      {#-- Document as a limitation that switching between views and materialized views requires manual `drop` on Snowflake --#}
+  {% elif existing_relation.is_table %}
       {#-- Can't overwrite a view with a table - we must drop --#}
       {{ log("Dropping relation " ~ target_relation ~ " because it is a " ~ existing_relation.type ~ " and this model is a materialized view.") }}
       {% do adapter.drop_relation(existing_relation) %}

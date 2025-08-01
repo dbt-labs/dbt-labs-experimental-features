@@ -1,4 +1,4 @@
 packages:
-    - local: ../
-    - package: fishtown-analytics/dbt_utils
-      version: 0.6.4
+  - local: ../
+  - package: dbt-labs/dbt_utils
+    version: 0.8.2
